@@ -1019,6 +1019,28 @@ body {
     border-radius: 12px;
     padding: 14px;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    transition: opacity 0.3s, filter 0.3s;
+}
+
+/* === NO ASIC STATE (Level 0) === */
+#app.no-asic .stats-bars {
+    opacity: 0.4;
+    filter: grayscale(0.5);
+}
+
+#app.no-asic .action-btn {
+    opacity: 0.35;
+    filter: grayscale(0.6);
+    cursor: not-allowed;
+}
+
+#app.no-asic .action-btn:hover {
+    transform: none;
+    box-shadow: 0 4px 0 var(--black);
+}
+
+#app.no-asic .income-info {
+    opacity: 0.4;
 }
 
 .stat-bar {

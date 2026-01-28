@@ -385,13 +385,25 @@ const Game = {
         if (nextLevel) {
             this.els.upgradePrice.textContent = this.formatPrice(nextLevel.price);
             this.els.upgradeBtn.disabled = satoshi < nextLevel.price;
+            
+            // На уровне 0 показываем "КУПИТЬ ASIC" вместо "АПГРЕЙД"
+            const upgradeText = this.els.upgradeBtn.querySelector('[data-i18n="upgrade"], [data-i18n="buy-asic"]');
+            if (upgradeText) {
+                upgradeText.textContent = level === 0 ? t('buy-asic') : t('upgrade');
+                upgradeText.dataset.i18n = level === 0 ? 'buy-asic' : 'upgrade';
+            }
         } else {
             this.els.upgradeBtn.style.display = 'none';
         }
 
         // Feed/Cool buttons enabled state
-        this.els.feedBtn.disabled = this.state.feedCooldown > 0;
-        this.els.coolBtn.disabled = this.state.coolCooldown > 0;
+        // На уровне 0 (нет ASIC'а) - кнопки заблокированы
+        const isLevel0 = this.state.level === 0;
+        this.els.feedBtn.disabled = isLevel0 || this.state.feedCooldown > 0;
+        this.els.coolBtn.disabled = isLevel0 || this.state.coolCooldown > 0;
+        
+        // Добавляем класс для притушения статов на уровне 0
+        document.getElementById('app').classList.toggle('no-asic', isLevel0);
     },
 
     updateCooldownUI(type) {
