@@ -2083,6 +2083,51 @@ body {
     font-weight: bold;
 }
 
+.quiz-next-btn {
+    display: none;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(180deg, #34D399, #10B981);
+    border: 3px solid var(--black);
+    border-radius: 0 0 12px 12px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 9px;
+    color: var(--white);
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 0 3px 0 var(--black);
+}
+
+.quiz-next-btn:hover {
+    background: linear-gradient(180deg, #10B981, #059669);
+    transform: translateY(-1px);
+}
+
+.quiz-next-btn.visible {
+    display: block;
+}
+
+.quiz-level-complete {
+    text-align: center;
+    padding: 16px;
+    background: linear-gradient(180deg, #FEF3C7, #FDE68A);
+    border-radius: 8px;
+    margin: 8px 0;
+    border: 2px solid #F59E0B;
+}
+
+.quiz-level-complete .bonus-title {
+    font-size: 10px;
+    color: #92400E;
+    margin-bottom: 8px;
+}
+
+.quiz-level-complete .bonus-amount {
+    font-size: 14px;
+    color: #D97706;
+    font-weight: bold;
+}
+
 /* No Questions State */
 .quiz-empty {
     text-align: center;
@@ -2199,6 +2244,55 @@ body {
 
 .task-claim.claimed {
     background: var(--gray);
+}
+
+/* Daily Bonus Block */
+.daily-bonus-block {
+    margin-top: 12px;
+    padding: 16px;
+    background: linear-gradient(180deg, #FEF3C7, #FDE68A);
+    border: 3px solid #F59E0B;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.daily-bonus-block.claimed {
+    background: linear-gradient(180deg, #D1FAE5, #A7F3D0);
+    border-color: #10B981;
+}
+
+.daily-bonus-title {
+    font-size: 9px;
+    color: #92400E;
+    margin-bottom: 10px;
+}
+
+.daily-bonus-block.claimed .daily-bonus-title {
+    color: #065F46;
+    margin-bottom: 0;
+}
+
+.daily-bonus-btn {
+    padding: 12px 20px;
+    background: linear-gradient(180deg, #34D399, #10B981);
+    border: 3px solid var(--black);
+    border-radius: 8px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    color: var(--white);
+    cursor: pointer;
+    box-shadow: 0 3px 0 var(--black);
+    transition: all 0.15s;
+}
+
+.daily-bonus-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 0 var(--black);
+}
+
+.daily-bonus-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--black);
 }
 
 /* Achievement Item */

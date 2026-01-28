@@ -294,6 +294,28 @@ const Quests = {
         return { correct: false, reward: 0 };
     },
 
+    // Проверка завершения всех вопросов текущего уровня
+    checkLevelComplete() {
+        const level = window.Game?.state?.level || 1;
+        const levelQuestions = this.quizQuestions.filter(q => q.level <= level);
+        const answeredCount = levelQuestions.filter(q => 
+            this.state.quizAnswered.includes(q.id)
+        ).length;
+        
+        return answeredCount >= levelQuestions.length;
+    },
+
+    // Бонус за прохождение уровня (500 + 200 за каждый уровень)
+    getLevelBonus() {
+        const level = window.Game?.state?.level || 1;
+        return 500 + (level - 1) * 200;
+    },
+
+    // Проверка есть ли ещё вопросы на текущем уровне
+    hasMoreQuestions() {
+        return this.getAvailableQuestion() !== null;
+    },
+
     // === ЕЖЕДНЕВНЫЕ ЗАДАНИЯ ===
     checkDailyReset() {
         const today = new Date().toDateString();
@@ -348,6 +370,33 @@ const Quests = {
             return task.reward;
         }
         return 0;
+    },
+
+    // Проверка все ли задания выполнены и забраны
+    allTasksClaimed() {
+        const tasks = Object.values(this.state.dailyTasks);
+        if (tasks.length === 0) return false;
+        return tasks.every(t => t.claimed);
+    },
+
+    // Бонус за выполнение всех заданий (300 + 100 за каждый уровень)
+    getDailyBonus() {
+        const level = window.Game?.state?.level || 1;
+        return 300 + (level - 1) * 100;
+    },
+
+    // Проверка получен ли уже бонус сегодня
+    isDailyBonusClaimed() {
+        const today = new Date().toDateString();
+        return this.state.dailyBonusClaimed === today;
+    },
+
+    // Отметить бонус как полученный
+    claimDailyBonus() {
+        const today = new Date().toDateString();
+        this.state.dailyBonusClaimed = today;
+        this.saveState();
+        return this.getDailyBonus();
     },
 
     // === ДОСТИЖЕНИЯ ===
@@ -538,6 +587,7 @@ const QuestsUI = {
             quizAnswers: document.getElementById('quiz-answers'),
             quizResult: document.getElementById('quiz-result'),
             quizReward: document.getElementById('quiz-reward'),
+            quizNextBtn: document.getElementById('quiz-next-btn'),
             dailyTasksList: document.getElementById('daily-tasks-list'),
             achievementsList: document.getElementById('achievements-list'),
             eventBanner: document.getElementById('event-banner'),
@@ -557,6 +607,7 @@ const QuestsUI = {
         this.els.quizModal?.addEventListener('click', (e) => {
             if (e.target === this.els.quizModal) this.closeQuiz();
         });
+        this.els.quizNextBtn?.addEventListener('click', () => this.nextQuestion());
 
         // Tasks
         this.els.tasksBtn?.addEventListener('click', () => this.openTasks());
@@ -680,14 +731,38 @@ const QuestsUI = {
             }
         }
 
-        // Автозакрытие через 3 секунды
-        setTimeout(() => {
+        // Показываем кнопку
+        if (Quests.hasMoreQuestions()) {
+            this.els.quizNextBtn.textContent = lang === 'ru' ? 'Следующий вопрос →' : 'Next question →';
+        } else {
+            // Все вопросы уровня пройдены — показываем бонус
+            const bonus = Quests.getLevelBonus();
+            this.els.quizNextBtn.textContent = lang === 'ru' ? `🎉 Забрать бонус +${bonus} сат` : `🎉 Claim bonus +${bonus} sat`;
+        }
+        this.els.quizNextBtn.classList.add('visible');
+    },
+
+    nextQuestion() {
+        const lang = I18n?.currentLang || 'ru';
+        
+        // Если вопросы закончились — выдаём бонус
+        if (!Quests.hasMoreQuestions()) {
+            const bonus = Quests.getLevelBonus();
+            if (window.Game) {
+                Game.addSatoshi(bonus);
+            }
             this.closeQuiz();
-        }, 3000);
+            return;
+        }
+        
+        // Открываем следующий вопрос
+        this.els.quizNextBtn.classList.remove('visible');
+        this.openQuiz();
     },
 
     closeQuiz() {
         this.els.quizModal.classList.remove('active');
+        this.els.quizNextBtn?.classList.remove('visible');
         this.currentQuestion = null;
     },
 
@@ -714,11 +789,11 @@ const QuestsUI = {
     renderDailyTasks() {
         const tasks = Quests.getTodayTasks();
         const lang = I18n?.currentLang || 'ru';
-        
-        this.els.dailyTasksList.innerHTML = tasks.map(task => {
+
+        let html = tasks.map(task => {
             const percent = Math.min(100, (task.progress / task.target) * 100);
             const name = lang === 'ru' ? task.nameRu : task.nameEn;
-            
+
             return `
                 <div class="task-item">
                     <div class="task-header">
@@ -730,8 +805,8 @@ const QuestsUI = {
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-size: 6px; color: var(--gray);">${task.progress}/${task.target}</span>
-                        <button class="task-claim ${task.claimed ? 'claimed' : ''}" 
-                                data-task="${task.id}" 
+                        <button class="task-claim ${task.claimed ? 'claimed' : ''}"
+                                data-task="${task.id}"
                                 ${!task.completed || task.claimed ? 'disabled' : ''}>
                             ${task.claimed ? (lang === 'ru' ? 'ПОЛУЧЕНО' : 'CLAIMED') : (lang === 'ru' ? 'ЗАБРАТЬ' : 'CLAIM')}
                         </button>
@@ -739,6 +814,27 @@ const QuestsUI = {
                 </div>
             `;
         }).join('');
+
+        // Показываем бонус если все задания забраны
+        if (Quests.allTasksClaimed() && !Quests.isDailyBonusClaimed()) {
+            const bonus = Quests.getDailyBonus();
+            html += `
+                <div class="daily-bonus-block">
+                    <div class="daily-bonus-title">🎉 ${lang === 'ru' ? 'Все задания выполнены!' : 'All tasks complete!'}</div>
+                    <button class="daily-bonus-btn" id="claim-daily-bonus">
+                        ${lang === 'ru' ? 'Забрать бонус' : 'Claim bonus'} +${bonus} сат
+                    </button>
+                </div>
+            `;
+        } else if (Quests.isDailyBonusClaimed()) {
+            html += `
+                <div class="daily-bonus-block claimed">
+                    <div class="daily-bonus-title">✓ ${lang === 'ru' ? 'Бонус получен!' : 'Bonus claimed!'}</div>
+                </div>
+            `;
+        }
+
+        this.els.dailyTasksList.innerHTML = html;
 
         // Bind claim buttons
         this.els.dailyTasksList.querySelectorAll('.task-claim').forEach(btn => {
@@ -748,13 +844,29 @@ const QuestsUI = {
                     Game.addSatoshi(reward);
                     this.renderDailyTasks();
                     this.updateTasksBadge();
-                    
+
                     if (window.Telegram?.WebApp?.HapticFeedback) {
                         window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
                     }
                 }
             });
         });
+
+        // Bind daily bonus button
+        const bonusBtn = document.getElementById('claim-daily-bonus');
+        if (bonusBtn) {
+            bonusBtn.addEventListener('click', () => {
+                const bonus = Quests.claimDailyBonus();
+                if (window.Game) {
+                    Game.addSatoshi(bonus);
+                    this.renderDailyTasks();
+
+                    if (window.Telegram?.WebApp?.HapticFeedback) {
+                        window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+                    }
+                }
+            });
+        }
     },
 
     renderAchievements() {
