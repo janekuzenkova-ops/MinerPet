@@ -301,17 +301,17 @@ body {
 /* Режим факта — облачко с текстом */
 .thought-bubble.fact-mode {
     white-space: normal;
-    width: 170px;
-    right: -180px;
+    width: 120px;
+    right: -130px;
     left: auto;
-    top: -10px;
-    padding: 10px 12px;
+    top: -20px;
+    padding: 8px 10px;
     animation: thought-float-slow 3s ease-in-out infinite;
 }
 
 .thought-bubble.fact-mode.left-side {
     right: auto;
-    left: -180px;
+    left: -130px;
 }
 
 .thought-bubble.fact-mode.visible {
