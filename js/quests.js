@@ -572,14 +572,12 @@ const QuestsUI = {
     },
 
     checkLevelVisibility() {
-        const level = window.Game?.state?.level || 0;
-        const show = level >= 1; // Показываем начиная с 1 уровня
-        
+        // Показываем квесты сразу с 0 уровня
         if (this.els.quizBtn) {
-            this.els.quizBtn.classList.toggle('hidden', !show);
+            this.els.quizBtn.classList.remove('hidden');
         }
         if (this.els.tasksBtn) {
-            this.els.tasksBtn.classList.toggle('hidden', !show);
+            this.els.tasksBtn.classList.remove('hidden');
         }
     },
 
