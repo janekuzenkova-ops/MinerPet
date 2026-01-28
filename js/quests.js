@@ -175,12 +175,53 @@ const Quests = {
     ],
 
     // === ЕЖЕДНЕВНЫЕ ЗАДАНИЯ ===
-    dailyTasksTemplate: [
+    // Задания обновляются каждые 2 часа
+    tasksTemplate: [
+        // Кормление
+        { id: 'feed1', nameRu: 'Накорми робота', nameEn: 'Feed robot once', target: 1, reward: 80, type: 'feed' },
         { id: 'feed3', nameRu: 'Накорми робота 3 раза', nameEn: 'Feed robot 3 times', target: 3, reward: 100, type: 'feed' },
+        { id: 'feed5', nameRu: 'Накорми робота 5 раз', nameEn: 'Feed robot 5 times', target: 5, reward: 150, type: 'feed' },
+        { id: 'feed10', nameRu: 'Накорми робота 10 раз', nameEn: 'Feed robot 10 times', target: 10, reward: 250, type: 'feed' },
+        
+        // Охлаждение
+        { id: 'cool1', nameRu: 'Охлади робота', nameEn: 'Cool robot once', target: 1, reward: 80, type: 'cool' },
         { id: 'cool2', nameRu: 'Охлади робота 2 раза', nameEn: 'Cool robot 2 times', target: 2, reward: 100, type: 'cool' },
-        { id: 'game1', nameRu: 'Сыграй в мини-игру', nameEn: 'Play mini-game', target: 1, reward: 120, type: 'game' },
-        { id: 'hotcool', nameRu: 'Охлади при >80°C', nameEn: 'Cool when >80°C', target: 1, reward: 150, type: 'hotcool' },
-        { id: 'earn50', nameRu: 'Заработай 50 сатоши', nameEn: 'Earn 50 satoshi', target: 50, reward: 100, type: 'earn' }
+        { id: 'cool5', nameRu: 'Охлади робота 5 раз', nameEn: 'Cool robot 5 times', target: 5, reward: 150, type: 'cool' },
+        { id: 'cool10', nameRu: 'Охлади робота 10 раз', nameEn: 'Cool robot 10 times', target: 10, reward: 250, type: 'cool' },
+        
+        // Критическое охлаждение
+        { id: 'hotcool1', nameRu: 'Охлади при >80°C', nameEn: 'Cool when >80°C', target: 1, reward: 120, type: 'hotcool' },
+        { id: 'hotcool3', nameRu: 'Охлади при >80°C 3 раза', nameEn: 'Cool when >80°C 3 times', target: 3, reward: 200, type: 'hotcool' },
+        
+        // Мини-игры
+        { id: 'game1', nameRu: 'Сыграй в мини-игру', nameEn: 'Play mini-game', target: 1, reward: 100, type: 'game' },
+        { id: 'game2', nameRu: 'Сыграй 2 мини-игры', nameEn: 'Play 2 mini-games', target: 2, reward: 180, type: 'game' },
+        { id: 'game3', nameRu: 'Сыграй 3 мини-игры', nameEn: 'Play 3 mini-games', target: 3, reward: 280, type: 'game' },
+        
+        // Заработок
+        { id: 'earn25', nameRu: 'Заработай 25 сатоши', nameEn: 'Earn 25 satoshi', target: 25, reward: 80, type: 'earn' },
+        { id: 'earn50', nameRu: 'Заработай 50 сатоши', nameEn: 'Earn 50 satoshi', target: 50, reward: 100, type: 'earn' },
+        { id: 'earn100', nameRu: 'Заработай 100 сатоши', nameEn: 'Earn 100 satoshi', target: 100, reward: 150, type: 'earn' },
+        { id: 'earn200', nameRu: 'Заработай 200 сатоши', nameEn: 'Earn 200 satoshi', target: 200, reward: 250, type: 'earn' },
+        { id: 'earn500', nameRu: 'Заработай 500 сатоши', nameEn: 'Earn 500 satoshi', target: 500, reward: 400, type: 'earn' },
+        
+        // Викторина
+        { id: 'quiz1', nameRu: 'Ответь на вопрос', nameEn: 'Answer a question', target: 1, reward: 100, type: 'quiz' },
+        { id: 'quiz2', nameRu: 'Ответь на 2 вопроса', nameEn: 'Answer 2 questions', target: 2, reward: 180, type: 'quiz' },
+        
+        // Комбо действия
+        { id: 'feedcool', nameRu: 'Накорми и охлади', nameEn: 'Feed and cool', target: 2, reward: 120, type: 'combo' },
+        { id: 'active5', nameRu: 'Сделай 5 действий', nameEn: 'Do 5 actions', target: 5, reward: 100, type: 'actions' },
+        { id: 'active10', nameRu: 'Сделай 10 действий', nameEn: 'Do 10 actions', target: 10, reward: 180, type: 'actions' },
+        { id: 'active20', nameRu: 'Сделай 20 действий', nameEn: 'Do 20 actions', target: 20, reward: 300, type: 'actions' },
+        
+        // Поддержание состояния
+        { id: 'keepwarm', nameRu: 'Не дай перегреться 5 мин', nameEn: 'Keep cool for 5 min', target: 1, reward: 150, type: 'keepcool' },
+        { id: 'keepfed', nameRu: 'Держи энергию >50%', nameEn: 'Keep energy >50%', target: 1, reward: 150, type: 'keepfed' },
+        
+        // Время в игре
+        { id: 'online2', nameRu: 'Играй 2 минуты', nameEn: 'Play for 2 minutes', target: 120, reward: 80, type: 'online' },
+        { id: 'online5', nameRu: 'Играй 5 минут', nameEn: 'Play for 5 minutes', target: 300, reward: 150, type: 'online' }
     ],
 
     // === ДОСТИЖЕНИЯ ===
@@ -247,7 +288,7 @@ const Quests = {
     // === ИНИЦИАЛИЗАЦИЯ ===
     init() {
         this.loadState();
-        this.checkDailyReset();
+        this.checkTasksReset();
         this.startEventTimer();
         console.log('🎯 Quests system initialized');
     },
@@ -283,14 +324,14 @@ const Quests = {
         if (!question) return { correct: false, reward: 0 };
 
         const correct = question.correct === answerIndex;
-        
+
         if (correct) {
             this.state.quizAnswered.push(questionId);
-            this.saveState();
+            this.trackQuiz(); // Трекаем для заданий
             this.checkAchievements();
             return { correct: true, reward: question.reward };
         }
-        
+
         return { correct: false, reward: 0 };
     },
 
@@ -317,23 +358,36 @@ const Quests = {
     },
 
     // === ЕЖЕДНЕВНЫЕ ЗАДАНИЯ ===
-    checkDailyReset() {
-        const today = new Date().toDateString();
-        if (this.state.lastDailyReset !== today) {
-            this.resetDailyTasks();
-            this.state.lastDailyReset = today;
+    // Проверка сброса заданий каждые 2 часа
+    checkTasksReset() {
+        const now = Date.now();
+        const twoHours = 2 * 60 * 60 * 1000; // 2 часа в мс
+        const lastReset = this.state.lastTasksReset || 0;
+        
+        if (now - lastReset >= twoHours) {
+            this.resetTasks();
+            this.state.lastTasksReset = now;
             this.state.stats.daysPlayed++;
             this.saveState();
         }
     },
 
-    resetDailyTasks() {
-        // Выбираем 3 случайных задания на день
-        const shuffled = [...this.dailyTasksTemplate].sort(() => Math.random() - 0.5);
-        const todayTasks = shuffled.slice(0, 3);
-        
+    // Время до следующего сброса заданий (в секундах)
+    getTimeUntilReset() {
+        const now = Date.now();
+        const twoHours = 2 * 60 * 60 * 1000;
+        const lastReset = this.state.lastTasksReset || 0;
+        const nextReset = lastReset + twoHours;
+        return Math.max(0, Math.floor((nextReset - now) / 1000));
+    },
+
+    resetTasks() {
+        // Выбираем 3 случайных задания
+        const shuffled = [...this.tasksTemplate].sort(() => Math.random() - 0.5);
+        const newTasks = shuffled.slice(0, 3);
+
         this.state.dailyTasks = {};
-        todayTasks.forEach(task => {
+        newTasks.forEach(task => {
             this.state.dailyTasks[task.id] = {
                 ...task,
                 progress: 0,
@@ -341,6 +395,9 @@ const Quests = {
                 claimed: false
             };
         });
+        
+        // Сбрасываем бонус за задания
+        this.state.tasksBonusClaimed = false;
     },
 
     getTodayTasks() {
@@ -385,16 +442,14 @@ const Quests = {
         return 300 + (level - 1) * 100;
     },
 
-    // Проверка получен ли уже бонус сегодня
-    isDailyBonusClaimed() {
-        const today = new Date().toDateString();
-        return this.state.dailyBonusClaimed === today;
+    // Проверка получен ли уже бонус за текущий цикл заданий
+    isTasksBonusClaimed() {
+        return this.state.tasksBonusClaimed === true;
     },
 
     // Отметить бонус как полученный
-    claimDailyBonus() {
-        const today = new Date().toDateString();
-        this.state.dailyBonusClaimed = today;
+    claimTasksBonus() {
+        this.state.tasksBonusClaimed = true;
         this.saveState();
         return this.getDailyBonus();
     },
@@ -512,6 +567,8 @@ const Quests = {
     trackFeed() {
         this.state.stats.totalFed++;
         this.updateTaskProgress('feed');
+        this.updateTaskProgress('combo'); // для комбо-заданий
+        this.updateTaskProgress('actions'); // для заданий на действия
         this.checkAchievements();
         this.saveState();
     },
@@ -519,6 +576,8 @@ const Quests = {
     trackCool(wasHot) {
         this.state.stats.totalCooled++;
         this.updateTaskProgress('cool');
+        this.updateTaskProgress('combo'); // для комбо-заданий
+        this.updateTaskProgress('actions'); // для заданий на действия
         if (wasHot) {
             this.state.stats.hotCools++;
             this.updateTaskProgress('hotcool');
@@ -537,7 +596,19 @@ const Quests = {
     trackGame() {
         this.state.stats.gamesPlayed++;
         this.updateTaskProgress('game');
+        this.updateTaskProgress('actions'); // для заданий на действия
         this.checkAchievements();
+        this.saveState();
+    },
+
+    trackQuiz() {
+        this.updateTaskProgress('quiz');
+        this.updateTaskProgress('actions');
+        this.saveState();
+    },
+
+    trackOnlineTime(seconds) {
+        this.updateTaskProgress('online', seconds);
         this.saveState();
     },
 
@@ -815,8 +886,20 @@ const QuestsUI = {
             `;
         }).join('');
 
+        // Показываем таймер до следующего сброса
+        const timeLeft = Quests.getTimeUntilReset();
+        const hours = Math.floor(timeLeft / 3600);
+        const mins = Math.floor((timeLeft % 3600) / 60);
+        const timeStr = `${hours}ч ${mins}м`;
+
+        html += `
+            <div class="tasks-timer">
+                ⏱️ ${lang === 'ru' ? 'Новые задания через' : 'New tasks in'}: ${timeStr}
+            </div>
+        `;
+
         // Показываем бонус если все задания забраны
-        if (Quests.allTasksClaimed() && !Quests.isDailyBonusClaimed()) {
+        if (Quests.allTasksClaimed() && !Quests.isTasksBonusClaimed()) {
             const bonus = Quests.getDailyBonus();
             html += `
                 <div class="daily-bonus-block">
@@ -826,7 +909,7 @@ const QuestsUI = {
                     </button>
                 </div>
             `;
-        } else if (Quests.isDailyBonusClaimed()) {
+        } else if (Quests.isTasksBonusClaimed()) {
             html += `
                 <div class="daily-bonus-block claimed">
                     <div class="daily-bonus-title">✓ ${lang === 'ru' ? 'Бонус получен!' : 'Bonus claimed!'}</div>
@@ -856,7 +939,7 @@ const QuestsUI = {
         const bonusBtn = document.getElementById('claim-daily-bonus');
         if (bonusBtn) {
             bonusBtn.addEventListener('click', () => {
-                const bonus = Quests.claimDailyBonus();
+                const bonus = Quests.claimTasksBonus();
                 if (window.Game) {
                     Game.addSatoshi(bonus);
                     this.renderDailyTasks();

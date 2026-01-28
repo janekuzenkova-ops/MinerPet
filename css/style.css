@@ -2246,6 +2246,17 @@ body {
     background: var(--gray);
 }
 
+/* Tasks Timer */
+.tasks-timer {
+    text-align: center;
+    padding: 10px;
+    font-size: 8px;
+    color: #6B7280;
+    background: #F3F4F6;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
 /* Daily Bonus Block */
 .daily-bonus-block {
     margin-top: 12px;
