@@ -301,8 +301,8 @@ body {
 /* Режим факта — облачко с текстом */
 .thought-bubble.fact-mode {
     white-space: normal;
-    width: 150px;
-    right: -160px;
+    width: 170px;
+    right: -180px;
     left: auto;
     top: -10px;
     padding: 10px 12px;
@@ -311,7 +311,7 @@ body {
 
 .thought-bubble.fact-mode.left-side {
     right: auto;
-    left: -160px;
+    left: -180px;
 }
 
 .thought-bubble.fact-mode.visible {
@@ -328,9 +328,9 @@ body {
 
 /* Текст факта */
 .thought-bubble.fact-mode .thought-icon {
-    font-size: 6px;
+    font-size: 8px;
     color: var(--black);
-    line-height: 1.6;
+    line-height: 1.5;
     word-wrap: break-word;
 }
 
