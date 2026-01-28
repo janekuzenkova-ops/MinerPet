@@ -220,8 +220,9 @@ const Game = {
         // Расход энергии
         this.state.energy = Math.max(0, this.state.energy - this.config.energyDrain);
 
-        // Рост температуры при работе
-        this.state.temperature = Math.min(100, this.state.temperature + this.config.tempIncrease);
+        // Рост температуры при работе (с учётом событий)
+        const heatMultiplier = window.Quests?.getHeatMultiplier() || 1;
+        this.state.temperature = Math.min(100, this.state.temperature + this.config.tempIncrease * heatMultiplier);
 
         // Эффективность в зависимости от температуры
         let efficiency = 1;
@@ -233,9 +234,15 @@ const Game = {
             efficiency = 0.2;
         }
 
-        // Доход
-        const income = this.state.hashrate * this.config.satoshiPerTH * efficiency;
+        // Доход с учётом событий
+        const eventMultiplier = window.Quests?.getIncomeMultiplier() || 1;
+        const income = this.state.hashrate * this.config.satoshiPerTH * efficiency * eventMultiplier;
         this.state.satoshi += income;
+        
+        // Трекинг заработка для квестов
+        if (income > 0 && window.Quests) {
+            Quests.trackEarning(income);
+        }
 
         this.updateRobotState();
         this.render();
@@ -244,9 +251,13 @@ const Game = {
 
     // Actions
     feed() {
-        if (this.state.feedCooldown > 0) return;
+        if (this.state.feedCooldown > 0 || this.state.level === 0) return;
         
-        this.state.energy = Math.min(100, this.state.energy + this.config.feedAmount);
+        // Бонус от события
+        const feedBonus = window.Quests?.getFeedBonus() || 1;
+        const feedAmount = this.config.feedAmount * feedBonus;
+        
+        this.state.energy = Math.min(100, this.state.energy + feedAmount);
         this.state.feedCooldown = this.getCurrentCooldown();
         
         this.updateCooldownUI('feed');
@@ -254,11 +265,17 @@ const Game = {
         this.saveState();
         
         this.haptic('light');
-        this.showHappy(); // Реакция радости при кормлении
+        this.showHappy();
+        
+        // Трекинг для квестов
+        if (window.Quests) {
+            Quests.trackFeed();
+            window.QuestsUI?.updateTasksBadge();
+        }
     },
 
     cool() {
-        if (this.state.coolCooldown > 0) return;
+        if (this.state.coolCooldown > 0 || this.state.level === 0) return;
         
         const wasHot = this.state.temperature >= this.config.overheatThreshold;
         this.state.temperature = Math.max(30, this.state.temperature - this.config.coolAmount);
@@ -275,6 +292,12 @@ const Game = {
             this.showExcitedReaction();
         } else {
             this.showHappy();
+        }
+        
+        // Трекинг для квестов
+        if (window.Quests) {
+            Quests.trackCool(wasHot);
+            window.QuestsUI?.updateTasksBadge();
         }
     },
 
@@ -309,6 +332,19 @@ const Game = {
             
             // Показать образовательный факт про апгрейд
             setTimeout(() => this.showUpgradeFact(), 1500);
+            
+            // Проверка достижений
+            if (window.Quests) {
+                const newAchievements = Quests.checkAchievements();
+                newAchievements.forEach((ach, i) => {
+                    setTimeout(() => {
+                        window.QuestsUI?.showAchievementPopup(ach);
+                    }, 2000 + i * 3500);
+                });
+                
+                // Обновить видимость кнопок квестов
+                window.QuestsUI?.updateUI();
+            }
         }
     },
 
@@ -771,6 +807,13 @@ const Game = {
 // Start game when DOM ready
 document.addEventListener('DOMContentLoaded', () => {
     Game.init();
+    
+    // Обновить UI квестов после загрузки игры
+    setTimeout(() => {
+        if (window.QuestsUI) {
+            QuestsUI.updateUI();
+        }
+    }, 100);
     
     // Telegram WebApp integration
     if (window.Telegram?.WebApp) {

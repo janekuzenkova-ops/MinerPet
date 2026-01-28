@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=10">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -22,8 +22,26 @@
             <button id="lang-toggle" class="lang-btn">EN</button>
         </header>
 
+        <!-- Event Banner -->
+        <div class="event-banner" id="event-banner">
+            <span class="event-icon">🚀</span>
+            <span class="event-text" id="event-text"></span>
+            <span class="event-timer" id="event-timer"></span>
+        </div>
+
         <!-- Robot Area -->
         <div class="robot-area" id="robot-area">
+            <!-- Quiz Icon -->
+            <button class="quiz-btn" id="quiz-btn" title="Викторина">
+                <span>?</span>
+            </button>
+            
+            <!-- Tasks Icon -->
+            <button class="tasks-btn" id="tasks-btn" title="Задания">
+                <span>📋</span>
+                <span class="tasks-badge" id="tasks-badge"></span>
+            </button>
+
             <div class="environment" id="environment">
                 <!-- Фон меняется по уровням -->
             </div>
@@ -175,9 +193,56 @@
         </div>
     </div>
 
-    <script src="js/i18n.js?v=3"></script>
-    <script src="js/confetti.js?v=3"></script>
-    <script src="js/game.js?v=3"></script>
-    <script src="js/minigame.js?v=3"></script>
+    <!-- Quiz Modal -->
+    <div class="quiz-modal" id="quiz-modal">
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <span class="quiz-title" data-i18n="quiz-title">Викторина</span>
+                <button class="quiz-close" id="quiz-close">✕</button>
+            </div>
+            <div class="quiz-content">
+                <div class="quiz-question" id="quiz-question"></div>
+                <div class="quiz-answers" id="quiz-answers"></div>
+                <div class="quiz-result" id="quiz-result"></div>
+            </div>
+            <div class="quiz-reward">
+                <span data-i18n="reward">Награда:</span>
+                <span class="quiz-reward-value" id="quiz-reward">+0 сат</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tasks Modal -->
+    <div class="tasks-modal" id="tasks-modal">
+        <div class="tasks-container">
+            <div class="tasks-header">
+                <div class="tasks-tabs">
+                    <button class="tasks-tab active" data-tab="daily" data-i18n="daily-tasks">Задания</button>
+                    <button class="tasks-tab" data-tab="achievements" data-i18n="achievements">Достижения</button>
+                </div>
+                <button class="tasks-close" id="tasks-close">✕</button>
+            </div>
+            <div class="tasks-content">
+                <div class="tasks-list" id="daily-tasks-list"></div>
+                <div class="achievements-list hidden" id="achievements-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div class="achievement-popup" id="achievement-popup">
+        <div class="achievement-icon" id="ach-popup-icon">🏆</div>
+        <div class="achievement-info">
+            <div class="achievement-label" data-i18n="achievement-unlocked">Достижение!</div>
+            <div class="achievement-name" id="ach-popup-name"></div>
+        </div>
+        <div class="achievement-reward" id="ach-popup-reward">+0</div>
+    </div>
+
+    <script src="js/i18n.js?v=6"></script>
+    <script src="js/confetti.js?v=6"></script>
+    <script src="js/quests.js?v=6"></script>
+    <script src="js/game.js?v=6"></script>
+    <script src="js/minigame.js?v=6"></script>
 </body>
 </html>

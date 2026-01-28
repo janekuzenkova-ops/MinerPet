@@ -30,7 +30,13 @@ const I18n = {
             'start': 'СТАРТ',
             'mining-complete': 'Майнинг завершён!',
             'earned': 'Заработано:',
-            'claim': 'ЗАБРАТЬ'
+            'claim': 'ЗАБРАТЬ',
+            // Quests
+            'quiz-title': 'Викторина',
+            'reward': 'Награда:',
+            'daily-tasks': 'Задания',
+            'achievements': 'Достижения',
+            'achievement-unlocked': 'Достижение!'
         },
         en: {
             'energy': 'ENERGY',
@@ -58,7 +64,13 @@ const I18n = {
             'start': 'START',
             'mining-complete': 'Mining Complete!',
             'earned': 'Earned:',
-            'claim': 'CLAIM'
+            'claim': 'CLAIM',
+            // Quests
+            'quiz-title': 'Quiz',
+            'reward': 'Reward:',
+            'daily-tasks': 'Tasks',
+            'achievements': 'Achievements',
+            'achievement-unlocked': 'Achievement!'
         }
     },
 

@@ -1810,6 +1810,505 @@ body {
     }
 }
 
+/* ==================== */
+/* QUESTS & ACHIEVEMENTS */
+/* ==================== */
+
+/* Event Banner */
+.event-banner {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: linear-gradient(90deg, #8B5CF6, #6366F1);
+    border: 3px solid var(--black);
+    border-radius: 12px;
+    font-size: 8px;
+    color: var(--white);
+    animation: event-glow 1s ease-in-out infinite alternate;
+}
+
+.event-banner.active {
+    display: flex;
+}
+
+@keyframes event-glow {
+    0% { box-shadow: 0 0 5px #8B5CF6; }
+    100% { box-shadow: 0 0 15px #8B5CF6, 0 0 25px #6366F1; }
+}
+
+.event-icon {
+    font-size: 16px;
+}
+
+.event-timer {
+    background: var(--black);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 8px;
+}
+
+/* Quiz & Tasks Buttons */
+.quiz-btn, .tasks-btn {
+    position: absolute;
+    top: 10px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid var(--black);
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 3px 0 var(--black);
+}
+
+.quiz-btn {
+    left: 10px;
+    background: linear-gradient(180deg, #A78BFA, #8B5CF6);
+}
+
+.quiz-btn span {
+    color: var(--white);
+    font-weight: bold;
+    font-size: 18px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.tasks-btn {
+    left: 54px;
+    background: linear-gradient(180deg, #FCD34D, #F59E0B);
+}
+
+.quiz-btn:hover, .tasks-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 0 var(--black);
+}
+
+.quiz-btn:active, .tasks-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--black);
+}
+
+.quiz-btn.hidden, .tasks-btn.hidden {
+    display: none;
+}
+
+.tasks-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--red);
+    color: var(--white);
+    font-size: 8px;
+    font-family: 'Press Start 2P', cursive;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--black);
+}
+
+.tasks-badge.active {
+    display: flex;
+}
+
+/* Quiz Modal */
+.quiz-modal, .tasks-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+}
+
+.quiz-modal.active, .tasks-modal.active {
+    display: flex;
+}
+
+.quiz-container, .tasks-container {
+    background: var(--bg-primary);
+    border: 4px solid var(--black);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 360px;
+    max-height: 80vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.quiz-header, .tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 3px solid var(--black);
+    background: var(--white);
+}
+
+.quiz-title {
+    font-size: 12px;
+    color: var(--black);
+}
+
+.quiz-close, .tasks-close {
+    background: var(--white);
+    border: 3px solid var(--black);
+    color: var(--black);
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.quiz-close:hover, .tasks-close:hover {
+    background: var(--red);
+    color: var(--white);
+}
+
+.quiz-content {
+    padding: 16px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.quiz-question {
+    font-size: 10px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    text-align: center;
+    padding: 12px;
+    background: var(--white);
+    border: 3px solid var(--black);
+    border-radius: 8px;
+}
+
+.quiz-answers {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quiz-answer {
+    padding: 12px 16px;
+    background: var(--white);
+    border: 3px solid var(--black);
+    border-radius: 8px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+}
+
+.quiz-answer:hover {
+    background: #E8E8E0;
+    transform: translateX(4px);
+}
+
+.quiz-answer.correct {
+    background: var(--green);
+    color: var(--white);
+    animation: correct-pulse 0.5s ease;
+}
+
+.quiz-answer.wrong {
+    background: var(--red);
+    color: var(--white);
+    animation: wrong-shake 0.5s ease;
+}
+
+@keyframes correct-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes wrong-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+.quiz-result {
+    text-align: center;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    display: none;
+    border-radius: 8px;
+    margin: 8px 0;
+}
+
+.quiz-result.visible {
+    display: block;
+}
+
+.quiz-result.correct {
+    color: #166534;
+    background: #dcfce7;
+    border: 2px solid #22c55e;
+}
+
+.quiz-result.wrong {
+    color: #991b1b;
+    background: #fee2e2;
+    border: 2px solid #ef4444;
+}
+
+.quiz-reward {
+    padding: 12px 16px;
+    background: var(--white);
+    border-top: 3px solid var(--black);
+    text-align: center;
+    font-size: 10px;
+}
+
+.quiz-reward-value {
+    color: #F7931A;
+    font-weight: bold;
+}
+
+/* No Questions State */
+.quiz-empty {
+    text-align: center;
+    padding: 32px 16px;
+    font-size: 10px;
+    line-height: 1.8;
+}
+
+.quiz-empty-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+/* Tasks Modal */
+.tasks-tabs {
+    display: flex;
+    gap: 8px;
+}
+
+.tasks-tab {
+    padding: 8px 12px;
+    background: transparent;
+    border: none;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    color: var(--gray);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+}
+
+.tasks-tab.active {
+    color: var(--black);
+    border-bottom-color: var(--black);
+}
+
+.tasks-content {
+    padding: 16px;
+    flex: 1;
+    overflow-y: auto;
+    max-height: 50vh;
+}
+
+.tasks-list, .achievements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.achievements-list.hidden, .tasks-list.hidden {
+    display: none;
+}
+
+/* Task Item */
+.task-item {
+    background: var(--white);
+    border: 3px solid var(--black);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-name {
+    font-size: 8px;
+    flex: 1;
+}
+
+.task-reward {
+    font-size: 8px;
+    color: #F7931A;
+}
+
+.task-progress-bar {
+    height: 8px;
+    background: var(--black);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.task-progress-fill {
+    height: 100%;
+    background: var(--green);
+    transition: width 0.3s;
+}
+
+.task-progress-fill.complete {
+    background: #F7931A;
+}
+
+.task-claim {
+    padding: 8px 12px;
+    background: var(--green);
+    border: 2px solid var(--black);
+    border-radius: 4px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 6px;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+.task-claim:disabled {
+    background: var(--gray);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.task-claim.claimed {
+    background: var(--gray);
+}
+
+/* Achievement Item */
+.achievement-item {
+    background: var(--white);
+    border: 3px solid var(--black);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.achievement-item.locked {
+    opacity: 0.5;
+    filter: grayscale(0.8);
+}
+
+.achievement-item.unlocked {
+    border-color: #F7931A;
+    box-shadow: 0 0 10px rgba(247, 147, 26, 0.3);
+}
+
+.ach-icon {
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FEF3C7;
+    border: 2px solid var(--black);
+    border-radius: 8px;
+}
+
+.achievement-item.locked .ach-icon {
+    background: #E5E7EB;
+}
+
+.ach-info {
+    flex: 1;
+}
+
+.ach-name {
+    font-size: 8px;
+    margin-bottom: 4px;
+}
+
+.ach-desc {
+    font-size: 6px;
+    color: var(--gray);
+}
+
+.ach-reward {
+    font-size: 8px;
+    color: #F7931A;
+}
+
+/* Achievement Popup */
+.achievement-popup {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: var(--white);
+    border: 4px solid #8B5CF6;
+    border-radius: 12px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 2000;
+    opacity: 0;
+    transition: all 0.5s ease;
+    box-shadow: 0 4px 0 #6D28D9, 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.achievement-popup.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.achievement-popup .achievement-icon {
+    font-size: 24px;
+}
+
+.achievement-popup .achievement-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.achievement-popup .achievement-label {
+    font-size: 7px;
+    color: #8B5CF6;
+    text-transform: uppercase;
+}
+
+.achievement-popup .achievement-name {
+    font-size: 10px;
+    color: var(--black);
+    font-weight: bold;
+}
+
+.achievement-popup .achievement-reward {
+    font-size: 12px;
+    color: #16A34A;
+    font-weight: bold;
+}
+
 /* Responsive */
 @media (max-width: 360px) {
     #app {
@@ -1828,5 +2327,11 @@ body {
     .robot-screen {
         width: 50px;
         height: 35px;
+    }
+    
+    .quiz-btn, .tasks-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
     }
 }

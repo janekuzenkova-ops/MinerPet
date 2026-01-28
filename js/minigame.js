@@ -207,6 +207,13 @@ const MiniGame = {
         if (window.Game) {
             Game.addSatoshi(this.state.score);
         }
+        
+        // Трекинг для квестов
+        if (window.Quests) {
+            Quests.trackGame();
+            window.QuestsUI?.updateTasksBadge();
+        }
+        
         this.els.modal.classList.remove('active');
         document.body.style.overflow = '';
     },
