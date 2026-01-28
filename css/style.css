@@ -1,0 +1,1810 @@
+/* MinerPet - Tamagotchi Style */
+
+:root {
+    --bg-primary: #FFB800;
+    --bg-secondary: #FFA500;
+    --bg-dark: #E59400;
+    --black: #1a1a1a;
+    --white: #FFFEF0;
+    --green: #4ADE80;
+    --green-dark: #22C55E;
+    --red: #EF4444;
+    --blue: #3B82F6;
+    --gray: #6B7280;
+    --energy-color: #FACC15;
+    --temp-low: #3B82F6;
+    --temp-mid: #F97316;
+    --temp-high: #EF4444;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    color: var(--black);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+#app {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 100vh;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.header-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    background: var(--black);
+    border-radius: 50%;
+}
+
+.logo {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--black);
+    letter-spacing: 2px;
+}
+
+.lang-btn {
+    background: var(--white);
+    border: 3px solid var(--black);
+    color: var(--black);
+    padding: 6px 10px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.lang-btn:hover {
+    background: var(--black);
+    color: var(--white);
+}
+
+.lang-btn:active {
+    transform: scale(0.95);
+}
+
+/* Robot Area */
+.robot-area {
+    background: linear-gradient(180deg, #FFFEF8 0%, #FFF8E7 100%);
+    border: 4px solid var(--black);
+    border-radius: 16px;
+    padding: 20px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 15px;
+    position: relative;
+    overflow: visible; /* Чтобы облачко не обрезалось */
+    box-shadow: inset 0 4px 8px rgba(0,0,0,0.05);
+}
+
+/* Environment backgrounds by level */
+.environment {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    transition: all 0.5s;
+}
+
+.environment.level-container {
+    background: 
+        linear-gradient(180deg, #87CEEB 0%, #87CEEB 60%, #8B7355 60%, #8B7355 100%);
+}
+
+.environment.level-container::after {
+    content: '';
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 60px;
+    background: #4A5568;
+    border: 3px solid var(--black);
+}
+
+.environment.level-farm {
+    background: 
+        linear-gradient(180deg, #1E3A5F 0%, #1E3A5F 40%, #2D3748 40%, #2D3748 100%);
+}
+
+.environment.level-datacenter {
+    background: 
+        linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+}
+
+/* Pixel Robot */
+.robot {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: robot-idle 2s ease-in-out infinite;
+    margin-top: 0; /* Позиция робота */
+}
+
+@keyframes robot-idle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+.robot.working {
+    animation: robot-working 0.3s ease-in-out infinite;
+}
+
+@keyframes robot-working {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-2px) rotate(1deg); }
+}
+
+.robot.overheating {
+    animation: robot-overheat 0.2s ease-in-out infinite;
+}
+
+@keyframes robot-overheat {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
+}
+
+.robot-body {
+    width: 80px;
+    height: 70px;
+    background: #4A5568;
+    border: 4px solid var(--black);
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.robot-screen {
+    width: 60px;
+    height: 40px;
+    background: #1a1a1a;
+    border: 2px solid var(--black);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.robot-eyes {
+    display: flex;
+    gap: 16px;
+}
+
+.eye {
+    width: 10px;
+    height: 10px;
+    background: var(--green);
+    border-radius: 2px;
+    animation: blink 3s ease-in-out infinite;
+}
+
+.robot.overheating .eye {
+    background: var(--red);
+    animation: none;
+}
+
+.robot.sleeping .eye {
+    height: 2px;
+    background: var(--gray);
+}
+
+@keyframes blink {
+    0%, 90%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.1); }
+}
+
+/* === ОБЛАЧКО МЫСЛЕЙ (справа или слева от робота) === */
+.thought-bubble {
+    position: absolute;
+    top: 10px;
+    right: -120px;
+    left: auto;
+    transform: scale(0);
+    background: var(--white);
+    border: 3px solid var(--black);
+    border-radius: 12px;
+    padding: 8px 12px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 100;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.thought-bubble::before,
+.thought-bubble::after {
+    content: '';
+    position: absolute;
+    background: var(--white);
+    border: 2px solid var(--black);
+    border-radius: 50%;
+}
+
+/* Хвостик слева от облачка (для правой позиции) */
+.thought-bubble::before {
+    width: 10px;
+    height: 10px;
+    left: -15px;
+    right: auto;
+    top: 20px;
+}
+
+.thought-bubble::after {
+    width: 6px;
+    height: 6px;
+    left: -22px;
+    right: auto;
+    top: 25px;
+}
+
+/* Позиция слева */
+.thought-bubble.left-side {
+    right: auto;
+    left: -120px;
+}
+
+.thought-bubble.left-side::before {
+    left: auto;
+    right: -15px;
+}
+
+.thought-bubble.left-side::after {
+    left: auto;
+    right: -22px;
+}
+
+.thought-bubble.visible {
+    opacity: 1;
+    transform: scale(1);
+    animation: thought-float 2s ease-in-out infinite;
+}
+
+/* Режим факта — облачко с текстом */
+.thought-bubble.fact-mode {
+    white-space: normal;
+    width: 150px;
+    right: -160px;
+    left: auto;
+    top: -10px;
+    padding: 10px 12px;
+    animation: thought-float-slow 3s ease-in-out infinite;
+}
+
+.thought-bubble.fact-mode.left-side {
+    right: auto;
+    left: -160px;
+}
+
+.thought-bubble.fact-mode.visible {
+    transform: scale(1);
+}
+
+.thought-icon {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    color: #F7931A;
+    line-height: 1.4;
+    display: block;
+}
+
+/* Текст факта */
+.thought-bubble.fact-mode .thought-icon {
+    font-size: 6px;
+    color: var(--black);
+    line-height: 1.6;
+    word-wrap: break-word;
+}
+
+@keyframes thought-float {
+    0%, 100% { transform: scale(1) translateX(0); }
+    50% { transform: scale(1) translateX(3px); }
+}
+
+@keyframes thought-float-slow {
+    0%, 100% { transform: scale(1) translateX(0); }
+    50% { transform: scale(1) translateX(2px); }
+}
+
+/* === ГЛАЗА СМОТРЯТ ПО СТОРОНАМ === */
+.robot.looking-left .eye {
+    transform: translateX(-3px);
+}
+
+.robot.looking-right .eye {
+    transform: translateX(3px);
+}
+
+.robot.looking-up .eye::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    border-radius: inherit;
+}
+
+/* === ПОДМИГИВАНИЕ === */
+.robot.winking .eye.left {
+    transform: scaleY(0.1);
+}
+
+/* === ЭМОЦИИ === */
+.robot.happy .robot-mouth {
+    width: 24px;
+    height: 8px;
+    border-radius: 0 0 12px 12px;
+    background: var(--green);
+}
+
+.robot.excited .eye {
+    animation: excited-eyes 0.3s ease-in-out infinite;
+}
+
+@keyframes excited-eyes {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.robot.excited .robot-mouth {
+    width: 16px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--black);
+}
+
+.robot.love .eye {
+    background: #EF4444 !important;
+    border-radius: 0;
+    width: 10px;
+    height: 10px;
+    clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 50% 70%, 20% 100%, 0% 35%);
+    animation: love-beat 0.5s ease-in-out infinite;
+}
+
+@keyframes love-beat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.robot.sleepy .eye {
+    height: 3px;
+    background: var(--gray);
+    animation: none;
+}
+
+.robot.sleepy .robot-mouth {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--black);
+}
+
+/* Z-буквы при сне */
+.robot.sleepy::after {
+    content: 'Z z z';
+    position: absolute;
+    top: -20px;
+    right: -25px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    color: var(--gray);
+    animation: zzz-float 1.5s ease-in-out infinite;
+}
+
+@keyframes zzz-float {
+    0%, 100% { opacity: 0.5; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-8px); }
+}
+
+.robot.surprised .eye {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 3px solid var(--black);
+}
+
+.robot.surprised .eye::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--black);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.robot.surprised .robot-mouth {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--black);
+}
+
+/* === ПРЫЖОК РАДОСТИ === */
+.robot.jumping {
+    animation: jump-joy 0.5s ease-out;
+}
+
+@keyframes jump-joy {
+    0% { transform: translateY(0); }
+    30% { transform: translateY(-20px) scale(1.1); }
+    50% { transform: translateY(-25px) scale(1.1); }
+    70% { transform: translateY(-15px); }
+    100% { transform: translateY(0); }
+}
+
+/* === СКУЧАЮЩИЙ ВИД === */
+.robot.bored .eye {
+    animation: bored-look 3s ease-in-out infinite;
+}
+
+@keyframes bored-look {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    50% { transform: translateX(0); }
+    75% { transform: translateX(3px); }
+}
+
+.robot.bored .robot-mouth {
+    width: 12px;
+    height: 2px;
+    transform: rotate(-5deg);
+}
+
+.robot-mouth {
+    width: 20px;
+    height: 4px;
+    background: var(--green);
+    border-radius: 2px;
+}
+
+.robot.overheating .robot-mouth {
+    background: var(--red);
+    animation: mouth-stress 0.5s ease-in-out infinite;
+}
+
+@keyframes mouth-stress {
+    0%, 100% { width: 20px; }
+    50% { width: 10px; }
+}
+
+.robot.sleeping .robot-mouth {
+    background: var(--gray);
+}
+
+.robot-indicator {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: indicator-pulse 1s ease-in-out infinite;
+}
+
+.robot.sleeping .robot-indicator {
+    background: var(--gray);
+    animation: none;
+}
+
+.robot.overheating .robot-indicator {
+    background: var(--red);
+}
+
+/* Hot robot (>80°C) - red tint */
+.robot.hot .robot-body {
+    background: #B91C1C;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+}
+
+.robot.hot .robot-screen {
+    background: #7F1D1D;
+}
+
+.robot.hot .robot-base {
+    background: #991B1B;
+}
+
+/* ===== HEAT EFFECTS - Отключены ===== */
+.heat-effects {
+    display: none; /* Убираем огненные эффекты */
+}
+
+.flame {
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+    gap: 2px;
+}
+
+.flame-left {
+    left: -18px;
+    bottom: 20px;
+    flex-direction: column;
+}
+
+.flame-right {
+    right: -18px;
+    bottom: 20px;
+    flex-direction: column;
+}
+
+.flame-top {
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%) rotate(180deg);
+}
+
+.flame-bottom {
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.flame-part {
+    width: 10px;
+    height: 24px;
+    background: linear-gradient(to top, #DC2626, #F97316, #FDE047);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: flame-dance 0.3s ease-in-out infinite alternate;
+    box-shadow: 0 0 6px #F97316, 0 0 12px rgba(249, 115, 22, 0.5);
+}
+
+.flame-part:nth-child(1) {
+    animation-delay: 0s;
+    height: 16px;
+}
+
+.flame-part:nth-child(2) {
+    animation-delay: 0.1s;
+    height: 22px;
+}
+
+.flame-part:nth-child(3) {
+    animation-delay: 0.2s;
+    height: 14px;
+}
+
+@keyframes flame-dance {
+    0% {
+        transform: scaleY(1) scaleX(1);
+    }
+    100% {
+        transform: scaleY(1.2) scaleX(0.9);
+    }
+}
+
+/* ===== FIRE AURA - Огненный контур ===== */
+.sweat-drops {
+    display: none; /* Убираем капли */
+}
+
+/* Просто красный цвет при перегреве - без эффектов */
+
+/* ===== HUNGER INDICATOR ===== */
+.hunger-indicator {
+    position: absolute;
+    top: -45px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 20;
+}
+
+.robot.hungry .hunger-indicator {
+    opacity: 1;
+    animation: hunger-bounce 0.6s ease-in-out infinite;
+}
+
+@keyframes hunger-bounce {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(-8px);
+    }
+}
+
+.battery-empty {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background: var(--white);
+    border: 3px solid var(--black);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.battery-empty::after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 10px;
+    background: var(--black);
+    border-radius: 0 3px 3px 0;
+}
+
+.battery-outline {
+    display: none;
+}
+
+.battery-x {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    color: #EF4444;
+    font-weight: bold;
+    animation: blink-warning 0.5s ease-in-out infinite;
+}
+
+@keyframes blink-warning {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+@keyframes indicator-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.robot-base {
+    width: 90px;
+    height: 12px;
+    background: #2D3748;
+    border: 3px solid var(--black);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+}
+
+/* ===== EVOLUTION PARTS ===== */
+.evo-part {
+    position: absolute;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+}
+
+/* Level 2: Antenna */
+.antenna {
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    width: 6px;
+    height: 20px;
+    background: #4A5568;
+    border: 2px solid var(--black);
+    border-radius: 3px 3px 0 0;
+}
+
+.antenna::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    background: #EF4444;
+    border: 2px solid var(--black);
+    border-radius: 50%;
+    animation: antenna-blink 1s ease-in-out infinite;
+}
+
+@keyframes antenna-blink {
+    0%, 100% { background: #EF4444; box-shadow: 0 0 8px #EF4444; }
+    50% { background: #7F1D1D; box-shadow: none; }
+}
+
+.robot.evo-antenna .antenna {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+/* Level 3: Bigger screen/eyes */
+.robot.evo-screen .robot-screen {
+    width: 65px;
+    height: 45px;
+}
+
+.robot.evo-screen .eye {
+    width: 14px;
+    height: 14px;
+}
+
+.robot.evo-screen .robot-eyes {
+    gap: 20px;
+}
+
+/* Level 4: Arms */
+.arm {
+    top: 35px;
+    width: 12px;
+    height: 30px;
+    background: #4A5568;
+    border: 2px solid var(--black);
+    border-radius: 4px;
+}
+
+.arm-left {
+    left: -18px;
+}
+
+.arm-right {
+    right: -18px;
+}
+
+.arm::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 10px;
+    background: #2D3748;
+    border: 2px solid var(--black);
+    border-radius: 3px;
+}
+
+.robot.evo-arms .arm {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Level 5: Wheels */
+.wheels {
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    display: flex;
+    gap: 50px;
+}
+
+.wheel {
+    width: 16px;
+    height: 16px;
+    background: #1a1a1a;
+    border: 3px solid #4A5568;
+    border-radius: 50%;
+}
+
+.robot.evo-wheels .wheels {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+.robot.evo-wheels .robot-base {
+    border-radius: 0;
+}
+
+/* Level 6: Cooler fan on top */
+.cooler-fan {
+    top: -15px;
+    right: -5px;
+    width: 20px;
+    height: 20px;
+    background: #60A5FA;
+    border: 2px solid var(--black);
+    border-radius: 50%;
+}
+
+.cooler-fan::before {
+    content: '+';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    color: var(--white);
+    animation: fan-spin 0.5s linear infinite;
+}
+
+@keyframes fan-spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.robot.evo-cooler .cooler-fan {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Level 7: Wings/Panels */
+.wing {
+    top: 20px;
+    width: 25px;
+    height: 40px;
+    background: linear-gradient(135deg, #3B82F6, #60A5FA);
+    border: 2px solid var(--black);
+    border-radius: 4px;
+}
+
+.wing-left {
+    left: -30px;
+    transform: rotate(-10deg) scale(0);
+}
+
+.wing-right {
+    right: -30px;
+    transform: rotate(10deg) scale(0);
+}
+
+.wing::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 4px,
+        rgba(255,255,255,0.3) 4px,
+        rgba(255,255,255,0.3) 6px
+    );
+}
+
+.robot.evo-wings .wing-left {
+    opacity: 1;
+    transform: rotate(-10deg) scale(1);
+}
+
+.robot.evo-wings .wing-right {
+    opacity: 1;
+    transform: rotate(10deg) scale(1);
+}
+
+/* Level 8: MEGA BOT - glow effect */
+.robot.evo-mega .robot-body {
+    box-shadow: 0 0 20px #FACC15, 0 0 40px #F59E0B;
+}
+
+.robot.evo-mega .robot-screen {
+    background: linear-gradient(135deg, #1E3A5F, #0F172A);
+}
+
+.robot.evo-mega .eye {
+    background: #FACC15;
+    box-shadow: 0 0 10px #FACC15;
+}
+
+.robot.evo-mega .robot-indicator {
+    background: #FACC15;
+    box-shadow: 0 0 12px #FACC15;
+}
+
+.robot.evo-mega .antenna::after {
+    background: #FACC15;
+    box-shadow: 0 0 12px #FACC15;
+}
+
+.robot.evo-mega::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 3px solid #FACC15;
+    border-radius: 12px;
+    animation: mega-pulse 1.5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes mega-pulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+}
+
+.robot-status {
+    position: absolute;
+    bottom: 8px;
+    font-size: 8px;
+    color: var(--black);
+    background: var(--white);
+    padding: 4px 8px;
+    border: 2px solid var(--black);
+    border-radius: 4px;
+}
+
+/* Need Indicators */
+.need-indicators {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 10;
+}
+
+.need-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    border: 3px solid var(--black);
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s;
+}
+
+.need-icon.active {
+    opacity: 1;
+    transform: scale(1);
+    animation: need-pulse 0.8s ease-in-out infinite;
+}
+
+.need-icon.hungry {
+    background: var(--energy-color);
+}
+
+.need-icon.hot {
+    background: var(--red);
+}
+
+@keyframes need-pulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0,0,0,0.3);
+    }
+    50% { 
+        transform: scale(1.15);
+        box-shadow: 0 0 12px 4px rgba(0,0,0,0.2);
+    }
+}
+
+/* Stats Bars */
+.stats-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: linear-gradient(180deg, #FFFEF5 0%, #FFF9E6 100%);
+    border: 3px solid var(--black);
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.stat-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stat-bar-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 100px;
+    font-size: 8px;
+}
+
+.stat-icon {
+    font-size: 12px;
+}
+
+.stat-bar-track {
+    flex: 1;
+    height: 16px;
+    background: var(--black);
+    border-radius: 2px;
+    padding: 3px;
+    overflow: hidden;
+}
+
+.stat-bar-fill {
+    height: 100%;
+    border-radius: 1px;
+    transition: width 0.3s, background 0.3s;
+}
+
+.stat-bar-fill.energy {
+    background: var(--energy-color);
+}
+
+.stat-bar-fill.temp {
+    background: var(--temp-low);
+}
+
+.stat-bar-fill.temp.medium {
+    background: var(--temp-mid);
+}
+
+.stat-bar-fill.temp.high {
+    background: var(--temp-high);
+}
+
+.stat-bar-value {
+    min-width: 45px;
+    font-size: 8px;
+    text-align: right;
+}
+
+/* Balance */
+.balance {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(180deg, #FFFEF5 0%, #FFF9E6 100%);
+    border: 3px solid var(--black);
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 12px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.balance-icon {
+    font-size: 20px;
+    color: #F7931A;
+}
+
+/* Pixel Bitcoin icon */
+.pixel-btc {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btc-b {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px;
+    color: var(--gray);
+}
+
+.btc-lines {
+    display: none;
+}
+
+.balance-value {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.balance-label {
+    font-size: 8px;
+    color: var(--gray);
+}
+
+/* Income Info */
+.income-info {
+    text-align: center;
+    font-size: 8px;
+    color: var(--black);
+}
+
+#income-rate {
+    color: #1E40AF;
+    font-weight: bold;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 16px;
+    border: 3px solid var(--black);
+    border-radius: 12px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    box-shadow: 0 4px 0 var(--black);
+}
+
+.action-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 var(--black);
+}
+
+.action-btn:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 var(--black);
+}
+
+.action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.feed-btn {
+    background: linear-gradient(180deg, #FF7B47 0%, #FF5722 100%);
+    color: var(--white);
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+}
+
+.cool-btn {
+    background: linear-gradient(180deg, #60A5FA 0%, #3B82F6 100%);
+    color: var(--white);
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+}
+
+.cool-btn .btn-icon {
+    font-size: 20px;
+}
+
+.btn-icon {
+    font-size: 24px;
+}
+
+/* Pixel Battery Icon */
+.battery-icon {
+    display: flex;
+    align-items: center;
+    font-size: inherit;
+}
+
+.battery-body {
+    width: 24px;
+    height: 14px;
+    border: 3px solid var(--white);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    background: transparent;
+}
+
+.battery-level {
+    width: 100%;
+    height: 100%;
+    background: var(--white);
+    border-radius: 1px;
+    animation: battery-blink 1.5s ease-in-out infinite;
+}
+
+@keyframes battery-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.battery-tip {
+    width: 4px;
+    height: 8px;
+    background: var(--white);
+    border-radius: 0 2px 2px 0;
+    margin-left: 1px;
+}
+
+/* Pixel Thermometer Icon */
+.thermo-icon {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.thermo-tube {
+    position: absolute;
+    width: 6px;
+    height: 16px;
+    background: var(--white);
+    border-radius: 3px 3px 0 0;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.thermo-bulb {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: var(--white);
+    border-radius: 50%;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.thermo-arrow {
+    position: absolute;
+    right: 0;
+    top: 8px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid var(--white);
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    transform: rotate(90deg);
+}
+
+.btn-text {
+    /* наследует font-size от родительской кнопки */
+}
+
+.btn-cooldown {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 6px;
+    background: var(--black);
+    color: var(--white);
+    padding: 2px 4px;
+    border-radius: 2px;
+    display: none;
+}
+
+.action-btn.on-cooldown .btn-cooldown {
+    display: block;
+}
+
+.action-btn.on-cooldown {
+    opacity: 0.6;
+}
+
+/* Bottom Buttons */
+.bottom-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.game-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px;
+    border: 3px solid var(--black);
+    border-radius: 12px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 0 4px 0 var(--black);
+}
+
+.game-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 var(--black);
+}
+
+.game-btn:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 var(--black);
+}
+
+.minigame-btn {
+    background: linear-gradient(180deg, #6EE7B7 0%, #34D399 100%);
+    color: var(--black);
+}
+
+.upgrade-btn {
+    background: linear-gradient(180deg, #FCD34D 0%, #FBBF24 100%);
+    color: var(--black);
+}
+
+.upgrade-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: linear-gradient(180deg, #D1D5DB 0%, #9CA3AF 100%);
+}
+
+.game-btn .btn-icon {
+    font-size: 20px;
+}
+
+.upgrade-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.upgrade-price {
+    font-size: 8px;
+    color: var(--gray);
+}
+
+/* Level Info */
+.level-info {
+    text-align: center;
+    font-size: 8px;
+    color: var(--black);
+    padding: 8px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 4px;
+}
+
+#level-name {
+    font-weight: bold;
+}
+
+/* ==================== */
+/* MINI GAME STYLES     */
+/* ==================== */
+
+.minigame-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+}
+
+.minigame-modal.active {
+    display: flex;
+}
+
+.minigame-container {
+    background: var(--bg-primary);
+    border: 4px solid var(--black);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 360px;
+    padding: 16px;
+    position: relative;
+}
+
+.minigame-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.minigame-title {
+    font-size: 12px;
+    color: var(--black);
+}
+
+.minigame-close {
+    background: var(--white);
+    border: 3px solid var(--black);
+    color: var(--black);
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.minigame-close:hover {
+    background: var(--red);
+    color: var(--white);
+}
+
+.minigame-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 12px;
+    padding: 10px;
+    background: var(--white);
+    border: 3px solid var(--black);
+    border-radius: 8px;
+}
+
+.minigame-stat {
+    text-align: center;
+}
+
+.minigame-stat-value {
+    display: block;
+    font-size: 16px;
+    color: var(--black);
+}
+
+.minigame-stat-label {
+    font-size: 6px;
+    color: var(--gray);
+}
+
+.minigame-stat.timer .minigame-stat-value {
+    color: var(--blue);
+}
+
+.minigame-stat.timer.warning .minigame-stat-value {
+    color: var(--red);
+    animation: pulse 0.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Game Grid */
+.minigame-grid {
+    display: grid;
+    gap: 4px;
+    padding: 8px;
+    background: var(--white);
+    border: 3px solid var(--black);
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.minigame-tile {
+    aspect-ratio: 1;
+    background: #E8E8E0;
+    border: 2px solid var(--black);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-family: 'Press Start 2P', cursive;
+    cursor: pointer;
+    transition: all 0.1s;
+    user-select: none;
+}
+
+.minigame-tile:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+/* Tile colors by type */
+.minigame-tile[data-type="btc"] {
+    background: #F7931A;
+    color: var(--white);
+}
+
+.minigame-tile[data-type="block"] {
+    background: #6B21A8;
+    color: var(--white);
+}
+
+.minigame-tile[data-type="hash"] {
+    background: #1E40AF;
+    color: var(--white);
+}
+
+.minigame-tile[data-type="chip"] {
+    background: #059669;
+    color: var(--white);
+}
+
+.minigame-tile[data-type="bolt"] {
+    background: #DC2626;
+    color: var(--white);
+}
+
+.minigame-tile.selected {
+    border-color: var(--green);
+    border-width: 3px;
+    transform: scale(1.1);
+    box-shadow: 0 0 0 2px var(--green);
+}
+
+.minigame-tile.matched {
+    animation: match-pop 0.2s ease-out forwards;
+}
+
+@keyframes match-pop {
+    0% { transform: scale(1); opacity: 1; }
+    30% { transform: scale(1.4); }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+/* Match particles effect */
+.match-particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.match-particle:nth-child(6n+1) { animation: particle-fly-1 0.6s ease-out forwards; }
+.match-particle:nth-child(6n+2) { animation: particle-fly-2 0.6s ease-out forwards; }
+.match-particle:nth-child(6n+3) { animation: particle-fly-3 0.6s ease-out forwards; }
+.match-particle:nth-child(6n+4) { animation: particle-fly-4 0.6s ease-out forwards; }
+.match-particle:nth-child(6n+5) { animation: particle-fly-5 0.6s ease-out forwards; }
+.match-particle:nth-child(6n+6) { animation: particle-fly-6 0.6s ease-out forwards; }
+
+@keyframes particle-fly-1 {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(25px, -30px) scale(0); opacity: 0; }
+}
+@keyframes particle-fly-2 {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(-25px, -30px) scale(0); opacity: 0; }
+}
+@keyframes particle-fly-3 {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(30px, 10px) scale(0); opacity: 0; }
+}
+@keyframes particle-fly-4 {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(-30px, 10px) scale(0); opacity: 0; }
+}
+@keyframes particle-fly-5 {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(0, -35px) scale(0); opacity: 0; }
+}
+@keyframes particle-fly-6 {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(0, 25px) scale(0); opacity: 0; }
+}
+
+/* Score popup */
+.score-popup {
+    position: absolute;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    color: var(--green);
+    pointer-events: none;
+    z-index: 100;
+    animation: score-fly 0.8s ease-out forwards;
+    text-shadow: 2px 2px 0 var(--black);
+}
+
+@keyframes score-fly {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-40px) scale(1.2); opacity: 0; }
+}
+
+/* Бонусный попап */
+.score-popup.bonus {
+    font-size: 10px;
+    color: #F7931A;
+    animation: bonus-fly 1.2s ease-out forwards;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.score-popup .bonus-text {
+    font-size: 8px;
+    color: #EF4444;
+    display: block;
+    margin-bottom: 2px;
+}
+
+@keyframes bonus-fly {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    20% { transform: translateY(-10px) scale(1.3); }
+    100% { transform: translateY(-50px) scale(1.1); opacity: 0; }
+}
+
+/* Сообщение о перемешивании */
+.shuffle-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px;
+    color: var(--white);
+    background: var(--black);
+    padding: 12px 20px;
+    border-radius: 8px;
+    z-index: 200;
+    animation: shuffle-pop 0.8s ease-out forwards;
+}
+
+@keyframes shuffle-pop {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+    40% { transform: translate(-50%, -50%) scale(1); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+
+.minigame-tile.shake {
+    animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
+.minigame-tile.hint {
+    animation: hint-pulse 0.8s ease-in-out infinite;
+}
+
+@keyframes hint-pulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(74, 222, 128, 0);
+    }
+    50% { 
+        transform: scale(1.1);
+        box-shadow: 0 0 12px rgba(74, 222, 128, 0.8);
+        border-color: var(--green);
+    }
+}
+
+.minigame-hint {
+    text-align: center;
+    font-size: 6px;
+    color: var(--black);
+}
+
+/* Overlays */
+.minigame-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 184, 0, 0.95);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.minigame-overlay.hidden {
+    display: none;
+}
+
+.overlay-content {
+    text-align: center;
+    padding: 20px;
+}
+
+.overlay-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.overlay-title {
+    font-size: 14px;
+    color: var(--black);
+    margin-bottom: 8px;
+}
+
+.overlay-subtitle {
+    font-size: 8px;
+    color: var(--black);
+    opacity: 0.8;
+    margin-bottom: 16px;
+}
+
+.overlay-reward {
+    font-size: 10px;
+    color: var(--black);
+    margin-bottom: 16px;
+    padding: 12px;
+    background: var(--white);
+    border: 3px solid var(--black);
+    border-radius: 8px;
+}
+
+.reward-value {
+    font-size: 20px;
+    color: #F7931A;
+    display: block;
+    margin: 8px 0;
+}
+
+.overlay-btn {
+    background: var(--green);
+    border: 4px solid var(--black);
+    color: var(--black);
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.overlay-btn:hover {
+    background: var(--green-dark);
+    transform: scale(1.02);
+}
+
+.overlay-btn:active {
+    transform: scale(0.98);
+}
+
+/* Confetti */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    z-index: 9999;
+    animation: confetti-fall 3s ease-out forwards;
+}
+
+@keyframes confetti-fall {
+    0% {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(100vh) rotate(720deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 360px) {
+    #app {
+        padding: 8px;
+    }
+    
+    .logo {
+        font-size: 12px;
+    }
+    
+    .robot-body {
+        width: 70px;
+        height: 60px;
+    }
+    
+    .robot-screen {
+        width: 50px;
+        height: 35px;
+    }
+}

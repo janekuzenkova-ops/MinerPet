@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MinerPet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-dots">
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            <div class="logo">MINERPET</div>
+            <button id="lang-toggle" class="lang-btn">EN</button>
+        </header>
+
+        <!-- Robot Area -->
+        <div class="robot-area" id="robot-area">
+            <div class="environment" id="environment">
+                <!-- Фон меняется по уровням -->
+            </div>
+            
+            
+            <div class="robot" id="robot">
+                <!-- Облачко мыслей -->
+                <div class="thought-bubble" id="thought-bubble">
+                    <span class="thought-icon">₿</span>
+                </div>
+                
+                <!-- Эффекты перегрева - огненный контур -->
+                <div class="heat-effects">
+                    <!-- Пламя со всех сторон -->
+                    <div class="flame flame-top">
+                        <div class="flame-part"></div>
+                        <div class="flame-part"></div>
+                        <div class="flame-part"></div>
+                    </div>
+                    <div class="flame flame-left">
+                        <div class="flame-part"></div>
+                        <div class="flame-part"></div>
+                        <div class="flame-part"></div>
+                    </div>
+                    <div class="flame flame-right">
+                        <div class="flame-part"></div>
+                        <div class="flame-part"></div>
+                        <div class="flame-part"></div>
+                    </div>
+                    <div class="flame flame-bottom">
+                        <div class="flame-part"></div>
+                        <div class="flame-part"></div>
+                        <div class="flame-part"></div>
+                    </div>
+                </div>
+                
+                <!-- Индикатор голода -->
+                <div class="hunger-indicator">
+                    <div class="battery-empty">
+                        <div class="battery-outline"></div>
+                        <div class="battery-x">!</div>
+                    </div>
+                </div>
+                
+                <!-- Эволюционные части -->
+                <div class="evo-part antenna"></div>
+                <div class="evo-part cooler-fan"></div>
+                <div class="evo-part wing wing-left"></div>
+                <div class="evo-part wing wing-right"></div>
+                <div class="evo-part arm arm-left"></div>
+                <div class="evo-part arm arm-right"></div>
+                
+                <div class="robot-body">
+                    <div class="robot-screen">
+                        <div class="robot-eyes">
+                            <div class="eye left"></div>
+                            <div class="eye right"></div>
+                        </div>
+                        <div class="robot-mouth"></div>
+                    </div>
+                    <div class="robot-indicator"></div>
+                </div>
+                <div class="robot-base"></div>
+                
+                <!-- Колёсики -->
+                <div class="evo-part wheels">
+                    <div class="wheel wheel-left"></div>
+                    <div class="wheel wheel-right"></div>
+                </div>
+            </div>
+            <!-- Состояние робота -->
+            <div class="robot-status" id="robot-status"></div>
+        </div>
+
+        <!-- Stats Bars -->
+        <div class="stats-bars">
+            <div class="stat-bar">
+                <div class="stat-bar-label">
+                    <span class="stat-icon">⚡</span>
+                    <span data-i18n="energy">ЭНЕРГИЯ</span>
+                </div>
+                <div class="stat-bar-track">
+                    <div class="stat-bar-fill energy" id="energy-bar" style="width: 100%"></div>
+                </div>
+                <span class="stat-bar-value" id="energy-value">100%</span>
+            </div>
+            <div class="stat-bar">
+                <div class="stat-bar-label">
+                    <span class="stat-icon">🌡</span>
+                    <span data-i18n="temperature">ТЕМП.</span>
+                </div>
+                <div class="stat-bar-track">
+                    <div class="stat-bar-fill temp" id="temp-bar" style="width: 30%"></div>
+                </div>
+                <span class="stat-bar-value" id="temp-value">30°C</span>
+            </div>
+        </div>
+
+        <!-- Balance -->
+        <div class="balance">
+            <span class="balance-icon pixel-btc">
+                <span class="btc-b">B</span>
+                <span class="btc-lines"></span>
+            </span>
+            <span class="balance-value" id="balance">0</span>
+            <span class="balance-label" data-i18n="satoshi">сатоши</span>
+        </div>
+
+        <!-- Income Info -->
+        <div class="income-info">
+            <span data-i18n="income">Доход:</span>
+            <span id="income-rate">+0</span>
+            <span>/сек</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="action-btn feed-btn" id="feed-btn">
+                <span class="btn-icon">⚡</span>
+                <span class="btn-text" data-i18n="feed">КОРМИТЬ</span>
+                <span class="btn-cooldown" id="feed-cooldown"></span>
+            </button>
+            <button class="action-btn cool-btn" id="cool-btn">
+                <span class="btn-icon">❄️</span>
+                <span class="btn-text" data-i18n="cool">ОХЛАДИТЬ</span>
+                <span class="btn-cooldown" id="cool-cooldown"></span>
+            </button>
+        </div>
+
+        <!-- Bottom Buttons -->
+        <div class="bottom-buttons">
+            <button class="game-btn minigame-btn" id="minigame-btn">
+                <span class="btn-icon">🎮</span>
+                <span data-i18n="minigame">МИНИ-ИГРА</span>
+            </button>
+            <button class="game-btn upgrade-btn" id="upgrade-btn" disabled>
+                <span class="btn-icon">⬆️</span>
+                <span class="upgrade-text">
+                    <span data-i18n="upgrade">АПГРЕЙД</span>
+                    <span class="upgrade-price" id="upgrade-price">100 сат</span>
+                </span>
+            </button>
+        </div>
+
+        <!-- Level Info -->
+        <div class="level-info">
+            <span data-i18n="level">Уровень:</span>
+            <span id="level-name">Старт</span>
+        </div>
+    </div>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/confetti.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/minigame.js"></script>
+</body>
+</html>
