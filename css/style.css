@@ -1422,7 +1422,7 @@ body {
 }
 
 .minigame-container {
-    background: var(--bg-primary);
+    background: linear-gradient(180deg, #FEF3E2 0%, #FCE7CA 100%);
     border: 4px solid var(--black);
     border-radius: 12px;
     width: 100%;
@@ -1532,28 +1532,33 @@ body {
 
 /* Tile colors by type */
 .minigame-tile[data-type="btc"] {
-    background: #F7931A;
-    color: var(--white);
+    background: linear-gradient(180deg, #FCD34D, #FDE68A);
+    color: #92400E;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.3);
 }
 
 .minigame-tile[data-type="block"] {
-    background: #6B21A8;
-    color: var(--white);
+    background: linear-gradient(180deg, #C4B5FD, #DDD6FE);
+    color: #5B21B6;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.3);
 }
 
 .minigame-tile[data-type="hash"] {
-    background: #1E40AF;
-    color: var(--white);
+    background: linear-gradient(180deg, #93C5FD, #BFDBFE);
+    color: #1E40AF;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.3);
 }
 
 .minigame-tile[data-type="chip"] {
-    background: #059669;
-    color: var(--white);
+    background: linear-gradient(180deg, #86EFAC, #BBF7D0);
+    color: #166534;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.3);
 }
 
 .minigame-tile[data-type="bolt"] {
-    background: #DC2626;
-    color: var(--white);
+    background: linear-gradient(180deg, #FCA5A5, #FECACA);
+    color: #991B1B;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.3);
 }
 
 .minigame-tile.selected {

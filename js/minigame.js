@@ -709,7 +709,7 @@ const MiniGame = {
         const x = rect.left - gridRect.left + rect.width / 2;
         const y = rect.top - gridRect.top + rect.height / 2;
         
-        const colors = ['#F7931A', '#6B21A8', '#1E40AF', '#059669', '#DC2626', '#FFB800'];
+        const colors = ['#FCD34D', '#C4B5FD', '#93C5FD', '#86EFAC', '#FCA5A5', '#FDE68A'];
         
         for (let i = 0; i < 6; i++) {
             const particle = document.createElement('div');
