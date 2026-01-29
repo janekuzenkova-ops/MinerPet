@@ -103,6 +103,206 @@ const Game = {
             hashrate: 50000,
             baseCooldown: 40,
             evolution: 'evo-mega'
+        },
+        { 
+            id: 9, 
+            name: 'titan',
+            nameRu: 'Титан', 
+            nameEn: 'Titan',
+            price: 3500000,
+            hashrate: 150000,
+            baseCooldown: 45,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 10, 
+            name: 'overlord',
+            nameRu: 'Повелитель', 
+            nameEn: 'Overlord',
+            price: 12000000,
+            hashrate: 400000,
+            baseCooldown: 50,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 11, 
+            name: 'emperor',
+            nameRu: 'Император', 
+            nameEn: 'Emperor',
+            price: 40000000,
+            hashrate: 1200000,
+            baseCooldown: 55,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 12, 
+            name: 'god',
+            nameRu: 'Бог', 
+            nameEn: 'God',
+            price: 150000000,
+            hashrate: 3500000,
+            baseCooldown: 60,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 13, 
+            name: 'quantum',
+            nameRu: 'Квант', 
+            nameEn: 'Quantum',
+            price: 500000000,
+            hashrate: 10000000,
+            baseCooldown: 65,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 14, 
+            name: 'singularity',
+            nameRu: 'Сингулярность', 
+            nameEn: 'Singularity',
+            price: 2000000000,
+            hashrate: 30000000,
+            baseCooldown: 70,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 15, 
+            name: 'cosmic',
+            nameRu: 'Космический', 
+            nameEn: 'Cosmic',
+            price: 7000000000,
+            hashrate: 90000000,
+            baseCooldown: 75,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 16, 
+            name: 'galaxy',
+            nameRu: 'Галактика', 
+            nameEn: 'Galaxy',
+            price: 25000000000,
+            hashrate: 270000000,
+            baseCooldown: 80,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 17, 
+            name: 'universe',
+            nameRu: 'Вселенная', 
+            nameEn: 'Universe',
+            price: 90000000000,
+            hashrate: 800000000,
+            baseCooldown: 85,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 18, 
+            name: 'multiverse',
+            nameRu: 'Мультивселенная', 
+            nameEn: 'Multiverse',
+            price: 350000000000,
+            hashrate: 2500000000,
+            baseCooldown: 90,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 19, 
+            name: 'infinity',
+            nameRu: 'Бесконечность', 
+            nameEn: 'Infinity',
+            price: 1200000000000,
+            hashrate: 7000000000,
+            baseCooldown: 95,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 20, 
+            name: 'eternity',
+            nameRu: 'Вечность', 
+            nameEn: 'Eternity',
+            price: 5000000000000,
+            hashrate: 22000000000,
+            baseCooldown: 100,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 21, 
+            name: 'omega',
+            nameRu: 'Омега', 
+            nameEn: 'Omega',
+            price: 18000000000000,
+            hashrate: 65000000000,
+            baseCooldown: 105,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 22, 
+            name: 'alpha',
+            nameRu: 'Альфа', 
+            nameEn: 'Alpha',
+            price: 70000000000000,
+            hashrate: 200000000000,
+            baseCooldown: 110,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 23, 
+            name: 'nexus',
+            nameRu: 'Нексус', 
+            nameEn: 'Nexus',
+            price: 250000000000000,
+            hashrate: 600000000000,
+            baseCooldown: 115,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 24, 
+            name: 'zenith',
+            nameRu: 'Зенит', 
+            nameEn: 'Zenith',
+            price: 900000000000000,
+            hashrate: 1800000000000,
+            baseCooldown: 120,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 25, 
+            name: 'apex',
+            nameRu: 'Апекс', 
+            nameEn: 'Apex',
+            price: 3500000000000000,
+            hashrate: 5500000000000,
+            baseCooldown: 125,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 26, 
+            name: 'transcendent',
+            nameRu: 'Трансцендент', 
+            nameEn: 'Transcendent',
+            price: 15000000000000000,
+            hashrate: 17000000000000,
+            baseCooldown: 130,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 27, 
+            name: 'absolute',
+            nameRu: 'Абсолют', 
+            nameEn: 'Absolute',
+            price: 60000000000000000,
+            hashrate: 50000000000000,
+            baseCooldown: 135,
+            evolution: 'evo-mega'
+        },
+        { 
+            id: 28, 
+            name: 'supreme',
+            nameRu: 'ВЫСШИЙ', 
+            nameEn: 'SUPREME',
+            price: 250000000000000000,
+            hashrate: 150000000000000,
+            baseCooldown: 140,
+            evolution: 'evo-mega'
         }
     ],
 
@@ -139,6 +339,7 @@ const Game = {
     cacheElements() {
         this.els = {
             balance: document.getElementById('balance'),
+            balanceLabel: document.getElementById('balance-label'),
             energyBar: document.getElementById('energy-bar'),
             energyValue: document.getElementById('energy-value'),
             tempBar: document.getElementById('temp-bar'),
@@ -380,6 +581,27 @@ const Game = {
         return level ? level.baseCooldown : 15;
     },
 
+    // Форматирование баланса для компактного отображения
+    formatBalance(satoshi) {
+        const sats = Math.floor(satoshi);
+        
+        // Если меньше 100M сатоши - показываем в сатоши с суффиксами
+        if (sats < 100000000) {
+            if (sats < 10000) return sats.toLocaleString();
+            if (sats < 1000000) return (sats / 1000).toFixed(1) + 'K';
+            return (sats / 1000000).toFixed(1) + 'M';
+        }
+        
+        // Если больше 100M - переводим в BTC
+        const btc = sats / 100000000;
+        
+        if (btc < 1000) return btc.toFixed(2) + ' BTC';
+        if (btc < 1000000) return (btc / 1000).toFixed(2) + 'K BTC';
+        if (btc < 1000000000) return (btc / 1000000).toFixed(2) + 'M BTC';
+        if (btc < 1000000000000) return (btc / 1000000000).toFixed(2) + 'B BTC';
+        return (btc / 1000000000000).toFixed(2) + 'T BTC';
+    },
+
     // Rendering
     render() {
         const { satoshi, energy, temperature, level } = this.state;
@@ -387,7 +609,13 @@ const Game = {
         const nextLevel = this.getNextLevel();
 
         // Balance
-        this.els.balance.textContent = Math.floor(satoshi).toLocaleString();
+        const formattedBalance = this.formatBalance(satoshi);
+        this.els.balance.textContent = formattedBalance;
+        
+        // Скрываем label "сатоши" если показываем BTC
+        if (this.els.balanceLabel) {
+            this.els.balanceLabel.style.display = formattedBalance.includes('BTC') ? 'none' : '';
+        }
 
         // Energy bar
         this.els.energyBar.style.width = energy + '%';
