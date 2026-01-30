@@ -6,6 +6,7 @@ const Quests = {
         // Викторина (обновляется каждый час)
         currentQuizQuestions: [],  // 3 текущих вопроса
         quizAnswered: [],          // ID отвеченных вопросов в текущем цикле
+        quizAnsweredHistory: [],   // История всех уникальных ID за всё время (для достижений)
         quizErrors: 0,             // Количество ошибок в текущем цикле
         lastQuizReset: null,       // Время последнего сброса викторины
         quizBonusClaimed: false,   // Получен ли бонус за все 3
@@ -1091,18 +1092,40 @@ const Quests = {
 
     // === ДОСТИЖЕНИЯ ===
     achievementsList: [
+        // Первые шаги
         { id: 'first_asic', nameRu: 'Первый ASIC', nameEn: 'First ASIC', descRu: 'Купи первый ASIC', descEn: 'Buy first ASIC', reward: 100, icon: '🎉' },
-        { id: 'sat_1000', nameRu: 'Тысячник', nameEn: 'Thousander', descRu: 'Накопи 1000 сатоши', descEn: 'Save 1000 satoshi', reward: 200, icon: '💰' },
-        { id: 'sat_10000', nameRu: 'Богач', nameEn: 'Rich', descRu: 'Накопи 10000 сатоши', descEn: 'Save 10000 satoshi', reward: 1000, icon: '🤑' },
-        { id: 'sat_100000', nameRu: 'Магнат', nameEn: 'Magnate', descRu: 'Накопи 100000 сатоши', descEn: 'Save 100000 satoshi', reward: 5000, icon: '👑' },
+        
+        // Уровни (основная прогрессия)
         { id: 'level_3', nameRu: 'Юниор', nameEn: 'Junior', descRu: 'Достигни уровня Юниор', descEn: 'Reach Junior level', reward: 400, icon: '⭐' },
         { id: 'level_5', nameRu: 'Сеньор', nameEn: 'Senior', descRu: 'Достигни уровня Сеньор', descEn: 'Reach Senior level', reward: 2000, icon: '🌟' },
-        { id: 'level_8', nameRu: 'Легенда', nameEn: 'Legend', descRu: 'Достигни уровня ЛЕГЕНДА', descEn: 'Reach LEGEND level', reward: 15000, icon: '🏆' },
+        { id: 'level_8', nameRu: 'Легенда', nameEn: 'Legend', descRu: 'Достигни уровня ЛЕГЕНДА', descEn: 'Reach LEGEND level', reward: 10000, icon: '🏆' },
+        { id: 'level_10', nameRu: 'Повелитель', nameEn: 'Overlord', descRu: 'Достигни уровня Overlord', descEn: 'Reach Overlord level', reward: 50000, icon: '👹' },
+        { id: 'level_15', nameRu: 'Суверен', nameEn: 'Sovereign', descRu: 'Достигни уровня Sovereign', descEn: 'Reach Sovereign level', reward: 100000, icon: '💎' },
+        { id: 'level_20', nameRu: 'Апекс', nameEn: 'Apex', descRu: 'Достигни уровня Apex', descEn: 'Reach Apex level', reward: 500000, icon: '🔥' },
+        { id: 'level_25', nameRu: 'Мифический', nameEn: 'Mythic', descRu: 'Достигни уровня Mythic', descEn: 'Reach Mythic level', reward: 1000000, icon: '🌠' },
+        { id: 'level_28', nameRu: 'Верховный', nameEn: 'Supreme', descRu: 'Достигни уровня SUPREME', descEn: 'Reach SUPREME level', reward: 5000000, icon: '⚜️' },
+        
+        // Богатство (сатоши)
+        { id: 'sat_1000', nameRu: 'Тысячник', nameEn: 'Thousander', descRu: 'Накопи 1000 сатоши', descEn: 'Save 1000 satoshi', reward: 200, icon: '💰' },
+        { id: 'sat_10000', nameRu: 'Богач', nameEn: 'Rich', descRu: 'Накопи 10K сатоши', descEn: 'Save 10K satoshi', reward: 1000, icon: '🤑' },
+        { id: 'sat_100000', nameRu: 'Магнат', nameEn: 'Magnate', descRu: 'Накопи 100K сатоши', descEn: 'Save 100K satoshi', reward: 5000, icon: '👑' },
+        { id: 'sat_1000000', nameRu: 'Миллионер', nameEn: 'Millionaire', descRu: 'Накопи 1M сатоши', descEn: 'Save 1M satoshi', reward: 50000, icon: '💸' },
+        { id: 'sat_100000000', nameRu: 'Биткоинер', nameEn: 'Bitcoiner', descRu: 'Накопи 1 BTC', descEn: 'Save 1 BTC', reward: 500000, icon: '₿' },
+        
+        // Активность
         { id: 'feed_50', nameRu: 'Кормилец', nameEn: 'Feeder', descRu: 'Накорми 50 раз', descEn: 'Feed 50 times', reward: 200, icon: '⚡' },
+        { id: 'feed_200', nameRu: 'Энергетик', nameEn: 'Energizer', descRu: 'Накорми 200 раз', descEn: 'Feed 200 times', reward: 2000, icon: '🔋' },
         { id: 'cool_50', nameRu: 'Ледяной', nameEn: 'Ice Cold', descRu: 'Охлади 50 раз', descEn: 'Cool 50 times', reward: 200, icon: '❄️' },
+        { id: 'cool_200', nameRu: 'Морозильник', nameEn: 'Freezer', descRu: 'Охлади 200 раз', descEn: 'Cool 200 times', reward: 2000, icon: '🧊' },
+        
+        // Образование
         { id: 'quiz_5', nameRu: 'Знаток', nameEn: 'Expert', descRu: 'Ответь на 5 вопросов', descEn: 'Answer 5 questions', reward: 150, icon: '🧠' },
-        { id: 'quiz_all', nameRu: 'Профессор', nameEn: 'Professor', descRu: 'Ответь на все вопросы', descEn: 'Answer all questions', reward: 1000, icon: '🎓' },
-        { id: 'games_10', nameRu: 'Игрок', nameEn: 'Gamer', descRu: 'Сыграй 10 мини-игр', descEn: 'Play 10 mini-games', reward: 300, icon: '🎮' }
+        { id: 'quiz_50', nameRu: 'Эксперт', nameEn: 'Pro', descRu: 'Ответь на 50 вопросов', descEn: 'Answer 50 questions', reward: 5000, icon: '📚' },
+        { id: 'quiz_all', nameRu: 'Профессор', nameEn: 'Professor', descRu: 'Ответь на все 100 вопросов', descEn: 'Answer all 100 questions', reward: 20000, icon: '🎓' },
+        
+        // Развлечения
+        { id: 'games_10', nameRu: 'Игрок', nameEn: 'Gamer', descRu: 'Сыграй 10 мини-игр', descEn: 'Play 10 mini-games', reward: 300, icon: '🎮' },
+        { id: 'games_50', nameRu: 'Геймер', nameEn: 'Pro Gamer', descRu: 'Сыграй 50 мини-игр', descEn: 'Play 50 mini-games', reward: 3000, icon: '🕹️' }
     ],
 
     // === СЛУЧАЙНЫЕ СОБЫТИЯ ===
@@ -1244,6 +1267,15 @@ const Quests = {
 
         if (correct) {
             this.state.quizAnswered.push(questionId);
+            
+            // Добавляем в историю для достижений (только уникальные)
+            if (!this.state.quizAnsweredHistory) {
+                this.state.quizAnsweredHistory = [];
+            }
+            if (!this.state.quizAnsweredHistory.includes(questionId)) {
+                this.state.quizAnsweredHistory.push(questionId);
+            }
+            
             this.trackQuiz(); // Трекаем для заданий
             this.checkAchievements();
             return { correct: true, reward: question.reward };
@@ -1402,18 +1434,12 @@ const Quests = {
             const gameState = window.Game?.state;
             
             switch (ach.id) {
+                // Первые шаги
                 case 'first_asic':
                     earned = gameState?.level >= 1;
                     break;
-                case 'sat_1000':
-                    earned = this.state.stats.totalSatoshi >= 1000;
-                    break;
-                case 'sat_10000':
-                    earned = this.state.stats.totalSatoshi >= 10000;
-                    break;
-                case 'sat_100000':
-                    earned = this.state.stats.totalSatoshi >= 100000;
-                    break;
+                
+                // Уровни
                 case 'level_3':
                     earned = gameState?.level >= 3;
                     break;
@@ -1423,20 +1449,72 @@ const Quests = {
                 case 'level_8':
                     earned = gameState?.level >= 8;
                     break;
+                case 'level_10':
+                    earned = gameState?.level >= 10;
+                    break;
+                case 'level_15':
+                    earned = gameState?.level >= 15;
+                    break;
+                case 'level_20':
+                    earned = gameState?.level >= 20;
+                    break;
+                case 'level_25':
+                    earned = gameState?.level >= 25;
+                    break;
+                case 'level_28':
+                    earned = gameState?.level >= 28;
+                    break;
+                
+                // Богатство
+                case 'sat_1000':
+                    earned = this.state.stats.totalSatoshi >= 1000;
+                    break;
+                case 'sat_10000':
+                    earned = this.state.stats.totalSatoshi >= 10000;
+                    break;
+                case 'sat_100000':
+                    earned = this.state.stats.totalSatoshi >= 100000;
+                    break;
+                case 'sat_1000000':
+                    earned = this.state.stats.totalSatoshi >= 1000000;
+                    break;
+                case 'sat_100000000':
+                    earned = this.state.stats.totalSatoshi >= 100000000;
+                    break;
+                
+                // Активность - кормление
                 case 'feed_50':
                     earned = this.state.stats.totalFed >= 50;
                     break;
+                case 'feed_200':
+                    earned = this.state.stats.totalFed >= 200;
+                    break;
+                
+                // Активность - охлаждение
                 case 'cool_50':
                     earned = this.state.stats.totalCooled >= 50;
                     break;
+                case 'cool_200':
+                    earned = this.state.stats.totalCooled >= 200;
+                    break;
+                
+                // Викторина (считаем уникальные ID из истории за всё время)
                 case 'quiz_5':
-                    earned = this.state.quizAnswered.length >= 5;
+                    earned = (this.state.quizAnsweredHistory?.length || 0) >= 5;
+                    break;
+                case 'quiz_50':
+                    earned = (this.state.quizAnsweredHistory?.length || 0) >= 50;
                     break;
                 case 'quiz_all':
-                    earned = this.state.quizAnswered.length >= this.quizQuestions.length;
+                    earned = (this.state.quizAnsweredHistory?.length || 0) >= this.quizQuestions.length;
                     break;
+                
+                // Мини-игры
                 case 'games_10':
                     earned = this.state.stats.gamesPlayed >= 10;
+                    break;
+                case 'games_50':
+                    earned = this.state.stats.gamesPlayed >= 50;
                     break;
             }
             
