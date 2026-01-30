@@ -362,20 +362,94 @@ const Game = {
 
     loadState() {
         const saved = localStorage.getItem('minerpet-state');
+        const backup = localStorage.getItem('minerpet-state-backup');
+        
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
                 this.state = { ...this.state, ...parsed };
                 const currentLevel = this.levels[this.state.level];
                 this.state.hashrate = currentLevel ? currentLevel.hashrate : 0;
+                
+                // Защита от сброса: проверяем достижения
+                this.validateStateWithAchievements();
+                
             } catch (e) {
                 console.warn('Failed to load state:', e);
+                // Пробуем восстановить из бэкапа
+                this.restoreFromBackup(backup);
             }
+        } else if (backup) {
+            // Основной state потерян, восстанавливаем из бэкапа
+            console.log('🔄 Restoring from backup...');
+            this.restoreFromBackup(backup);
+        }
+    },
+
+    // Проверка: если есть достижения за уровни, но уровень 0 — восстанавливаем
+    validateStateWithAchievements() {
+        const questsData = localStorage.getItem('minerpet-quests');
+        if (!questsData) return;
+        
+        try {
+            const quests = JSON.parse(questsData);
+            const achievements = quests.achievements || [];
+            
+            // Определяем минимальный уровень по достижениям
+            let minLevel = 0;
+            if (achievements.includes('level_28')) minLevel = 28;
+            else if (achievements.includes('level_25')) minLevel = 25;
+            else if (achievements.includes('level_20')) minLevel = 20;
+            else if (achievements.includes('level_15')) minLevel = 15;
+            else if (achievements.includes('level_10')) minLevel = 10;
+            else if (achievements.includes('level_8')) minLevel = 8;
+            else if (achievements.includes('level_5')) minLevel = 5;
+            else if (achievements.includes('level_3')) minLevel = 3;
+            else if (achievements.includes('first_asic')) minLevel = 1;
+            
+            // Если текущий уровень меньше чем по достижениям — восстанавливаем
+            if (this.state.level < minLevel) {
+                console.log(`⚠️ State corrupted! Level ${this.state.level} but achievements show ${minLevel}. Restoring...`);
+                this.state.level = minLevel;
+                
+                // Восстанавливаем примерный баланс
+                const levelData = this.levels[minLevel];
+                if (levelData) {
+                    this.state.satoshi = Math.max(this.state.satoshi, levelData.price * 2);
+                }
+                
+                const currentLevel = this.levels[this.state.level];
+                this.state.hashrate = currentLevel ? currentLevel.hashrate : 0;
+                
+                this.saveState();
+            }
+        } catch (e) {
+            console.warn('Failed to validate state:', e);
+        }
+    },
+
+    restoreFromBackup(backup) {
+        if (!backup) return;
+        try {
+            const parsed = JSON.parse(backup);
+            this.state = { ...this.state, ...parsed };
+            const currentLevel = this.levels[this.state.level];
+            this.state.hashrate = currentLevel ? currentLevel.hashrate : 0;
+            console.log('✅ Restored from backup, level:', this.state.level);
+            this.saveState();
+        } catch (e) {
+            console.warn('Failed to restore from backup:', e);
         }
     },
 
     saveState() {
-        localStorage.setItem('minerpet-state', JSON.stringify(this.state));
+        const stateJson = JSON.stringify(this.state);
+        localStorage.setItem('minerpet-state', stateJson);
+        
+        // Сохраняем бэкап каждые 5 уровней или при высоком балансе
+        if (this.state.level >= 1 && (this.state.level % 5 === 0 || this.state.satoshi > 10000)) {
+            localStorage.setItem('minerpet-state-backup', stateJson);
+        }
     },
 
     bindEvents() {
